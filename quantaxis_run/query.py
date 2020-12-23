@@ -1,18 +1,22 @@
 import pymongo
+from quantaxis_run.setting import qarun_amqp, qarun_mongo_ip
 
 
 def query_result():
-    return [item for item in pymongo.MongoClient().quantaxis.joblog.find(
+    return [item for item in pymongo.MongoClient(
+        host=qarun_mongo_ip, connect=False).quantaxis.joblog.find(
         {'status': {'$in': ['failed', 'success']}},{'message':1, '_id':0})]
 
 
 def query_onejob(job_id):
-    return '\n'.join([item['message'] for item in pymongo.MongoClient().quantaxis.joblog.find(
+    return '\n'.join([item['message'] for item in pymongo.MongoClient(
+        host=qarun_mongo_ip, connect=False).quantaxis.joblog.find(
         {'job_id': job_id},{'message':1, '_id':0})])
 
 
 def query_job_by_filename(filename):
-    return '\n'.join([item['message'] for item in pymongo.MongoClient().quantaxis.joblog.find(
+    return '\n'.join([item['message'] for item in pymongo.MongoClient(
+        host=qarun_mongo_ip, connect=False).quantaxis.joblog.find(
         {'filename': filename},{'message':1, '_id':0})])
 
 
